@@ -1,10 +1,10 @@
 package by.romanovich.mydictinary.ui.translator
 
-import by.romanovich.mydictinary.domain.datasource.DataSourceRemote
-import by.romanovich.mydictinary.data.AppState
-import by.romanovich.mydictinary.domain.datasource.DataSourceLocal
 import by.romanovich.mydictinary.data.RepositoryImplementation
+import by.romanovich.mydictinary.domain.datasource.DataSourceLocal
+import by.romanovich.mydictinary.domain.datasource.DataSourceRemote
 import by.romanovich.mydictinary.domain.rx.SchedulerProvider
+import by.romanovich.mydictinary.ui.utils.AppState
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableObserver
 
@@ -20,12 +20,14 @@ class TranslatorPresenterImpl<T : AppState, V : TranslatorContract.View>(
 
     // Ссылка на View, никакого контекста
     private var currentView: V? = null
+
     // Как только появилась View, сохраняем ссылку на неё для дальнейшей работы
     override fun attachView(view: V) {
         if (view != currentView) {
             currentView = view
         }
     }
+
     // View скоро будет уничтожена: прерываем все загрузки и обнуляем ссылку,
 // чтобы предотвратить утечки памяти и NPE
     override fun detachView(view: V) {
@@ -34,6 +36,7 @@ class TranslatorPresenterImpl<T : AppState, V : TranslatorContract.View>(
             currentView = null
         }
     }
+
     // Стандартный код RxJava
     override fun getData(word: String, isOnline: Boolean) {
         compositeDisposable.add(
@@ -46,6 +49,7 @@ class TranslatorPresenterImpl<T : AppState, V : TranslatorContract.View>(
                 .subscribeWith(getObserver())
         )
     }
+
     private fun getObserver(): DisposableObserver<AppState> {
         return object : DisposableObserver<AppState>() {
             override fun onNext(appState: AppState) {
@@ -53,10 +57,12 @@ class TranslatorPresenterImpl<T : AppState, V : TranslatorContract.View>(
 // для отображения
                 currentView?.renderData(appState)
             }
+
             override fun onError(e: Throwable) {
 // Если произошла ошибка, передаем модель с ошибкой
                 currentView?.renderData(AppState.Error(e))
             }
+
             override fun onComplete() {
             }
         }

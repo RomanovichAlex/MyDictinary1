@@ -1,6 +1,5 @@
 package by.romanovich.mydictinary.data
 
-import by.romanovich.mydictinary.data.DataModel
 import by.romanovich.mydictinary.domain.datasource.DataSource
 import by.romanovich.mydictinary.domain.repository.Repository
 import io.reactivex.Observable

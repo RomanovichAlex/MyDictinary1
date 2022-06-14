@@ -7,12 +7,14 @@ import java.io.IOException
 
 class BaseInterceptor private constructor() : Interceptor {
     private var responseCode: Int = 0
+
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val response = chain.proceed(chain.request())
         responseCode = response.code()
         return response
     }
+
     fun getResponseCode(): ServerResponseStatusCode {
         var statusCode = ServerResponseStatusCode.UNDEFINED_ERROR
         when (responseCode / 100) {
@@ -24,6 +26,7 @@ class BaseInterceptor private constructor() : Interceptor {
         }
         return statusCode
     }
+
     enum class ServerResponseStatusCode {
         INFO,
         SUCCESS,
@@ -32,6 +35,7 @@ class BaseInterceptor private constructor() : Interceptor {
         SERVER_ERROR,
         UNDEFINED_ERROR
     }
+
     companion object {
         val interceptor: BaseInterceptor
             get() = BaseInterceptor()

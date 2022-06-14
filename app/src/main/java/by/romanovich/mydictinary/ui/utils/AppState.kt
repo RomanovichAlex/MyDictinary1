@@ -1,4 +1,6 @@
-package by.romanovich.mydictinary.data
+package by.romanovich.mydictinary.ui.utils
+
+import by.romanovich.mydictinary.data.DataModel
 
 sealed class AppState {
     data class Success(val data: List<DataModel>?) : AppState()

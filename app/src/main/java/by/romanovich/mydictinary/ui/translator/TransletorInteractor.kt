@@ -1,9 +1,9 @@
 package by.romanovich.mydictinary.ui.translator
 
 import by.romanovich.mydictinary.data.DataModel
-import by.romanovich.mydictinary.data.AppState
-import by.romanovich.mydictinary.domain.repository.Repository
 import by.romanovich.mydictinary.domain.Interactor
+import by.romanovich.mydictinary.domain.repository.Repository
+import by.romanovich.mydictinary.ui.utils.AppState
 import io.reactivex.Observable
 
 class TransletorInteractor(

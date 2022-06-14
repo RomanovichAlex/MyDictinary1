@@ -17,6 +17,7 @@ class MainAdapter(
         this.data = data
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             RecyclerItemViewHolder {
         return RecyclerItemViewHolder(
@@ -24,12 +25,15 @@ class MainAdapter(
                 .inflate(R.layout.activity_main_translation_item, parent, false) as View
         )
     }
+
     override fun onBindViewHolder(holder: RecyclerItemViewHolder, position: Int) {
         holder.bind(data.get(position))
     }
+
     override fun getItemCount(): Int {
         return data.size
     }
+
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(data: DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
@@ -40,9 +44,11 @@ class MainAdapter(
             }
         }
     }
+
     private fun openInNewWindow(listItemData: DataModel) {
         onListItemClickListener.onItemClick(listItemData)
     }
+
     interface OnListItemClickListener {
         fun onItemClick(data: DataModel)
     }

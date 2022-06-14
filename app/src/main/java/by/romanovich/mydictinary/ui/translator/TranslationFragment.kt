@@ -14,11 +14,13 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class TranslationFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentTranslationBinding? = null
-    private val binding get() = _binding!!
+    private val binding get() = _binding !!
     private var onSearchClickListener: OnSearchClickListener? = null
     private val textWatcher = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count:
-        Int) {
+        override fun onTextChanged(
+            s: CharSequence, start: Int, before: Int, count:
+            Int
+        ) {
             if (binding.searchEditText.text != null &&
                 binding.searchEditText.text.toString().isNotEmpty()
             ) {
@@ -29,8 +31,13 @@ class TranslationFragment : BottomSheetDialogFragment() {
                 binding.clearTextImageview.visibility = View.GONE
             }
         }
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after:
-        Int) {}
+
+        override fun beforeTextChanged(
+            s: CharSequence, start: Int, count: Int, after:
+            Int
+        ) {
+        }
+
         override fun afterTextChanged(s: Editable) {}
     }
     private val onSearchButtonClickListener =
@@ -38,9 +45,11 @@ class TranslationFragment : BottomSheetDialogFragment() {
             onSearchClickListener?.onClick(binding.searchEditText.text.toString())
             dismiss()
         }
+
     internal fun setOnSearchClickListener(listener: OnSearchClickListener) {
         onSearchClickListener = listener
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,25 +58,30 @@ class TranslationFragment : BottomSheetDialogFragment() {
         _binding = FragmentTranslationBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.searchButtonTextview.setOnClickListener(onSearchButtonClickListener)
         binding.searchEditText.addTextChangedListener(textWatcher)
         addOnClearClickListener()
     }
+
     override fun onDestroyView() {
         onSearchClickListener = null
         super.onDestroyView()
     }
+
     private fun addOnClearClickListener() {
         binding.clearTextImageview.setOnClickListener {
             binding.searchEditText.setText("")
             binding.searchButtonTextview.isEnabled = false
         }
     }
+
     interface OnSearchClickListener {
         fun onClick(searchWord: String)
     }
+
     companion object {
         fun newInstance(): TranslationFragment {
             return TranslationFragment()

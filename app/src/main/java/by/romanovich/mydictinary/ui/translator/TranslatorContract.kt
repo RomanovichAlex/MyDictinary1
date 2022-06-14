@@ -1,6 +1,6 @@
 package by.romanovich.mydictinary.ui.translator
 
-import by.romanovich.mydictinary.data.AppState
+import by.romanovich.mydictinary.ui.utils.AppState
 
 class TranslatorContract {
 
@@ -14,6 +14,7 @@ class TranslatorContract {
     interface Presenter<T : AppState, V : View> {
         fun attachView(view: V)
         fun detachView(view: V)
+
         // Получение данных с флагом isOnline(из Интернета или нет)
         fun getData(word: String, isOnline: Boolean)
     }

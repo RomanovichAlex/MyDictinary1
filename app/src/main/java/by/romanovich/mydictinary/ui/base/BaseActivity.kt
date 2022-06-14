@@ -2,8 +2,8 @@ package by.romanovich.mydictinary.ui.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import by.romanovich.mydictinary.data.AppState
 import by.romanovich.mydictinary.ui.translator.TranslatorContract
+import by.romanovich.mydictinary.ui.utils.AppState
 
 
 abstract class BaseActivity<T : AppState> : AppCompatActivity(), TranslatorContract.View {
@@ -15,11 +15,13 @@ abstract class BaseActivity<T : AppState> : AppCompatActivity(), TranslatorContr
         super.onCreate(savedInstanceState)
         presenter = createPresenter()
     }
+
     // Когда View готова отображать данные, передаём ссылку на View в презентер
     override fun onStart() {
         super.onStart()
         presenter.attachView(this)
     }
+
     // При пересоздании или уничтожении View удаляем ссылку, иначе в презентере
 // будет ссылка на несуществующую View
     override fun onStop() {
