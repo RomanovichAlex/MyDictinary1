@@ -24,5 +24,7 @@
     <dimen name="text_size_large">25sp</dimen>
     //Corner radius
     <dimen name="bottom_sheet_dialog_corner_radius">10dp</dimen>
+    <dimen name="icon_domain">55dp</dimen>
+    <dimen name="icon_clear_domain">27dp</dimen>
 
 </resources>
