@@ -30,7 +30,7 @@
 
         <EditText
             android:id="@+id/search_edit_text"
-            android:layout_width="331dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/text_authentication_editText"
             android:textSize="@dimen/size_text"
@@ -40,7 +40,7 @@
         <ImageView
             android:id="@+id/clear_text_imageview"
             android:layout_width="wrap_content"
-            android:layout_height="27dp"
+            android:layout_height="@dimen/icon_clear_domain"
             android:layout_gravity="end"
             android:layout_marginTop="@dimen/margin_small"
             android:contentDescription="@string/delete_description"
