@@ -33,10 +33,7 @@ class TranslationFragment : BottomSheetDialogFragment() {
         }
 
         override fun beforeTextChanged(
-            s: CharSequence, start: Int, count: Int, after:
-            Int
-        ) {
-        }
+            s: CharSequence, start: Int, count: Int, after: Int) {}
 
         override fun afterTextChanged(s: Editable) {}
     }

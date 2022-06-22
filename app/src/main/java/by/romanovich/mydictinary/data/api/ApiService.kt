@@ -1,4 +1,4 @@
-package by.romanovich.mydictinary.domain.datasource
+package by.romanovich.mydictinary.data.api
 
 import by.romanovich.mydictinary.data.DataModel
 import io.reactivex.Observable

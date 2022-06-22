@@ -1,5 +1,6 @@
-package by.romanovich.mydictinary.domain.datasource
+package by.romanovich.mydictinary.data.api
 
+import by.romanovich.mydictinary.data.utils.*
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -18,11 +19,11 @@ class BaseInterceptor private constructor() : Interceptor {
     fun getResponseCode(): ServerResponseStatusCode {
         var statusCode = ServerResponseStatusCode.UNDEFINED_ERROR
         when (responseCode / 100) {
-            1 -> statusCode = ServerResponseStatusCode.INFO
-            2 -> statusCode = ServerResponseStatusCode.SUCCESS
-            3 -> statusCode = ServerResponseStatusCode.REDIRECTION
-            4 -> statusCode = ServerResponseStatusCode.CLIENT_ERROR
-            5 -> statusCode = ServerResponseStatusCode.SERVER_ERROR
+            INFO -> statusCode = ServerResponseStatusCode.INFO
+            SUCCESS -> statusCode = ServerResponseStatusCode.SUCCESS
+            REDIRECTION -> statusCode = ServerResponseStatusCode.REDIRECTION
+            CLIENT_ERROR -> statusCode = ServerResponseStatusCode.CLIENT_ERROR
+            SERVER_ERROR -> statusCode = ServerResponseStatusCode.SERVER_ERROR
         }
         return statusCode
     }

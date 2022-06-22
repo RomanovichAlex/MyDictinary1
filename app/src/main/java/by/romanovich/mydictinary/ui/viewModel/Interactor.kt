@@ -1,4 +1,4 @@
-package by.romanovich.mydictinary.domain
+package by.romanovich.designationOfWords.viewModel
 
 import io.reactivex.Observable
 

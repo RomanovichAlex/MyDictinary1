@@ -1,6 +1,8 @@
 package by.romanovich.mydictinary.domain.datasource
 
 import by.romanovich.mydictinary.data.DataModel
+import by.romanovich.mydictinary.data.api.ApiService
+import by.romanovich.mydictinary.data.api.BaseInterceptor
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.Observable
 import okhttp3.Interceptor
