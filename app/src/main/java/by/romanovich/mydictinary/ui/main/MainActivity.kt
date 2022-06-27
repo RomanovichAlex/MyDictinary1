@@ -4,37 +4,24 @@ import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.romanovich.designationOfWords.utils.isOnline
 import by.romanovich.mydictinary.R
+import by.romanovich.mydictinary.data.AppState
 import by.romanovich.mydictinary.data.DataModel
 import by.romanovich.mydictinary.databinding.ActivityMainBinding
 import by.romanovich.mydictinary.ui.base.BaseActivity
 import by.romanovich.mydictinary.ui.main.adapter.MainAdapter
 import by.romanovich.mydictinary.ui.translator.TranslationFragment
-import by.romanovich.mydictinary.data.AppState
-import dagger.android.AndroidInjection
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// Контракта уже нет
+
 class MainActivity : BaseActivity<AppState, MainInteractor>() {
-    // Внедряем фабрику для создания ViewModel
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override lateinit var model: MainViewModel
-
-    // Создаём модель
-    /*override val model: MainViewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(MainViewModel::class.java)
-    }*/
-    // Паттерн Observer в действии. Именно с его помощью мы подписываемся на
-// изменения в LiveData
-    private val observer = Observer<AppState> { renderData(it) }
     private lateinit var binding: ActivityMainBinding
-    private var adapter: MainAdapter? = null
+    private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
+
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
@@ -46,89 +33,35 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Сообщаем Dagger’у, что тут понадобятся зависимости
-        AndroidInjection.inject(this)
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        iniViewModel()
+        initViews()
 
-        // Фабрика уже готова, можно создавать ViewModel
-        model = viewModelFactory.create(MainViewModel::class.java)
-        model.subscribe().observe(this@MainActivity, observer)
-
-
-
-
-
-        binding.searchFab.setOnClickListener {
-            val searchDialogFragment = TranslationFragment.newInstance()
-            searchDialogFragment.setOnSearchClickListener(object :
-                TranslationFragment.OnSearchClickListener {
-                override fun onClick(searchWord: String) {
-// Обратите внимание на этот ключевой момент. У ViewModel
-// мы получаем LiveData через метод getData и подписываемся
-// на изменения, передавая туда observer
-                    /* model.getData(searchWord, true).observe(this@MainActivity,
-                         observer)*/
-                    isNetworkAvailable = isOnline(applicationContext)
-                    if (isNetworkAvailable) {
-                        model.getData(searchWord, isNetworkAvailable)
-                    } else {
-                        Toast.makeText(
-                            this@MainActivity, "Device is offline",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            })
-            searchDialogFragment.show(
-                supportFragmentManager,
-                BOTTOM_SHEET_FRAGMENT_DIALOG_TAG
-            )
-        }
     }
 
-    // Удаляем ненужные вспомогательные методы типа createPresenter. Всё остальное - без изменений, за исключением одной детали:
+
     private fun showErrorScreen(error: String?) {
         showViewError()
         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
         binding.reloadButton.setOnClickListener {
-            model.subscribe().observe(this@MainActivity, observer)
-/*// В случае ошибки мы повторно запрашиваем данные и подписываемся
-// на изменения
-        model.getData("hi", true).observe(this@MainActivity, observer)*/
+            model.subscribe().observe(this@MainActivity) { renderData(it) }
         }
     }
-    /* private fun showErrorScreen(error: String?) {
-         showViewError()
-         binding.errorTextview.text = error ?: getString(R.string.undefined_error)
-         binding.reloadButton.setOnClickListener {
-             presenter.getData("hi", true)
-         }
-     }*/
-
-    /*override fun createPresenter(): Presenter<AppState, View> {
-        return MainPresenterImpl()
-    }*/
 
 
     override fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success -> {
-                val dataModel = appState.data
-                if (dataModel == null || dataModel.isEmpty()) {
+                showViewSuccess()
+                val data = appState.data
+                if (data == null || data.isEmpty()) {
                     showErrorScreen(getString(R.string.empty_server_response_on_success))
                 } else {
-                    showViewSuccess()
-                    if (adapter == null) {
-                        binding.mainActivityRecyclerview.layoutManager =
-                            LinearLayoutManager(applicationContext)
-                        binding.mainActivityRecyclerview.adapter =
-                            MainAdapter(onListItemClickListener, dataModel)
-                    } else {
-                        adapter !!.setData(dataModel)
-                    }
+                    adapter.setData(data)
                 }
             }
             is AppState.Loading -> {
@@ -166,9 +99,51 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
         binding.errorLinearLayout.visibility = VISIBLE
     }
 
+
+    private fun iniViewModel() {
+// Убедимся, что модель инициализируется раньше View
+        if (binding.mainActivityRecyclerview.adapter != null) {
+            throw IllegalStateException("The ViewModel should be initialised first")
+        }
+// Теперь ViewModel инициализируется через функцию by viewModel()
+// Это функция, предоставляемая Koin из коробки через зависимость
+// import org.koin.androidx.viewmodel.ext.android.viewModel
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
+        model.subscribe().observe(this@MainActivity) { renderData(it) }
+    }
+
+    private fun initViews() {
+        binding.searchFab.setOnClickListener {
+            val searchDialogFragment = TranslationFragment.newInstance()
+            searchDialogFragment.setOnSearchClickListener(object :
+                TranslationFragment.OnSearchClickListener {
+                override fun onClick(searchWord: String) {
+                    isNetworkAvailable = isOnline(applicationContext)
+                    if (isNetworkAvailable) {
+                        model.getData(searchWord, isNetworkAvailable)
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity, getString(R.string.device_is_offline),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            })
+            searchDialogFragment.show(
+                supportFragmentManager,
+                BOTTOM_SHEET_FRAGMENT_DIALOG_TAG
+            )
+        }
+        binding.mainActivityRecyclerview.layoutManager =
+            LinearLayoutManager(applicationContext)
+        binding.mainActivityRecyclerview.adapter = adapter
+    }
+
     companion object {
         private const val BOTTOM_SHEET_FRAGMENT_DIALOG_TAG =
             "74a54328-5d62-46bf-ab6b-cbf5fgt0-092395"
     }
+
 
 }

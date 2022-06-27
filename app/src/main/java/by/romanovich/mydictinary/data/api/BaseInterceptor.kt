@@ -18,7 +18,7 @@ class BaseInterceptor private constructor() : Interceptor {
 
     fun getResponseCode(): ServerResponseStatusCode {
         var statusCode = ServerResponseStatusCode.UNDEFINED_ERROR
-        when (responseCode / 100) {
+        when (responseCode / AVERAGE_STATUS_CODE) {
             INFO -> statusCode = ServerResponseStatusCode.INFO
             SUCCESS -> statusCode = ServerResponseStatusCode.SUCCESS
             REDIRECTION -> statusCode = ServerResponseStatusCode.REDIRECTION
