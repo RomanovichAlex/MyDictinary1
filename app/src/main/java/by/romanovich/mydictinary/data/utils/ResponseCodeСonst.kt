@@ -5,5 +5,4 @@ internal const val SUCCESS = 2
 internal const val REDIRECTION = 3
 internal const val CLIENT_ERROR = 4
 internal const val SERVER_ERROR = 5
-
 internal const val AVERAGE_STATUS_CODE = 100
