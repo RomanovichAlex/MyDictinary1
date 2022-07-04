@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import by.romanovich.mydictinary.R
 import by.romanovich.mydictinary.data.DataModel
+import by.romanovich.mydictinary.domain.utils.convertMeaningsToString
 
 
 class MainAdapter(
@@ -42,6 +43,10 @@ class MainAdapter(
                 itemView.findViewById<TextView>(R.id.header_textview_recycler_item).text = data.text
                 itemView.findViewById<TextView>(R.id.description_textview_recycler_item).text =
                     data.meanings?.get(0)?.translation?.translation
+
+                convertMeaningsToString(data.meanings!!)
+
+
                 itemView.setOnClickListener { openInNewWindow(data) }
             }
         }

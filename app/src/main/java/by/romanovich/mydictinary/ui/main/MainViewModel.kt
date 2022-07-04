@@ -3,7 +3,7 @@ package by.romanovich.mydictinary.ui.main
 import androidx.lifecycle.LiveData
 import by.romanovich.designationOfWords.viewModel.BaseViewModel
 import by.romanovich.mydictinary.data.AppState
-import by.romanovich.mydictinary.domain.utils.parseSearchResults
+import by.romanovich.mydictinary.domain.utils.parseOnlineSearchResults
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,7 +37,7 @@ class MainViewModel(
     private suspend fun startInteractor(word: String, isOnline: Boolean) =
         withContext(Dispatchers.IO) {
             _mutableLiveData.postValue(
-                parseSearchResults(
+                parseOnlineSearchResults(
                     interactor.getData(
                         word,
                         isOnline

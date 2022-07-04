@@ -26,5 +26,6 @@
     <dimen name="bottom_sheet_dialog_corner_radius">10dp</dimen>
     <dimen name="icon_domain">55dp</dimen>
     <dimen name="icon_clear_domain">27dp</dimen>
+    <dimen name="history_margin">20dp</dimen>
 
 </resources>

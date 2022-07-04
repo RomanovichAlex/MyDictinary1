@@ -11,7 +11,7 @@ abstract class BaseViewModel<T : AppState>(
 ) : ViewModel() {
 
     protected val viewModelCoroutineScope = CoroutineScope(
-        Dispatchers.Main
+        Dispatchers.IO
                 + SupervisorJob()
                 + CoroutineExceptionHandler { _, throwable ->
             handleError(throwable)

@@ -4,7 +4,7 @@ import by.romanovich.mydictinary.domain.datasource.DataSource
 import by.romanovich.mydictinary.domain.repository.Repository
 
 
-class RepositoryImplementation(private val dataSource: DataSource<List<DataModel>>) :
+class RepositoryImpl(private val dataSource: DataSource<List<DataModel>>) :
     Repository<List<DataModel>> {
     // Репозиторий возвращает данные, используя dataSource (локальный или
 // внешний)

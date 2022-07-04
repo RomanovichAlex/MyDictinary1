@@ -1,4 +1,4 @@
-package by.romanovich.mydictinary.ui
+package by.romanovich.mydictinary.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

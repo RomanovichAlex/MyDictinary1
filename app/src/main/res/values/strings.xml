@@ -10,6 +10,11 @@
     <string name="button_search">Search</string>
     <string name="search_hint">New word</string>
     <string name="delete_description">X</string>
+    <string name="image_stub">image</string>
     <string name="device_is_offline">Device is offline</string>
+    <string name="History">История поиска</string>
+    <string name="history">История</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -1,6 +1,9 @@
 package by.romanovich.mydictinary.ui.main
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -10,7 +13,10 @@ import by.romanovich.mydictinary.R
 import by.romanovich.mydictinary.data.AppState
 import by.romanovich.mydictinary.data.DataModel
 import by.romanovich.mydictinary.databinding.ActivityMainBinding
+import by.romanovich.mydictinary.domain.utils.convertMeaningsToString
 import by.romanovich.mydictinary.ui.base.BaseActivity
+import by.romanovich.mydictinary.ui.details.DescriptionActivity
+import by.romanovich.mydictinary.ui.history.HistoryActivity
 import by.romanovich.mydictinary.ui.main.adapter.MainAdapter
 import by.romanovich.mydictinary.ui.translator.TranslationFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,18 +28,36 @@ class MainActivity : BaseActivity<AppState, MainInteractor>() {
     private lateinit var binding: ActivityMainBinding
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
+
     private val onListItemClickListener: MainAdapter.OnListItemClickListener =
         object : MainAdapter.OnListItemClickListener {
             override fun onItemClick(data: DataModel) {
-                Toast.makeText(
-                    this@MainActivity, data.text,
-                    Toast.LENGTH_SHORT
-                ).show()
+                startActivity(
+                    DescriptionActivity.getIntent(
+                        this@MainActivity,
+                        data.text!!,
+                        convertMeaningsToString(data.meanings!!),
+                        data.meanings[0].imageUrl)
+                )
             }
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.hystory_menu_bottom_navigation_view, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.bottom_view_history -> {
+                startActivity(Intent(this, HistoryActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

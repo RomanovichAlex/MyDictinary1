@@ -8,13 +8,14 @@ import by.romanovich.designationOfWords.utils.isOnline
 import by.romanovich.designationOfWords.viewModel.BaseViewModel
 import by.romanovich.designationOfWords.viewModel.Interactor
 import by.romanovich.mydictinary.data.AppState
+import by.romanovich.mydictinary.data.DataModel
 
 
 abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity() {
 
     abstract val model: BaseViewModel<T>
 
-    protected var isNetworkAvailable: Boolean = false
+    protected open var isNetworkAvailable: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onCreate(savedInstanceState, persistentState)
@@ -35,6 +36,7 @@ abstract class BaseActivity<T : AppState, I : Interactor<T>> : AppCompatActivity
 
     // Каждая Активити будет отображать какие-то данные в соответствующем состоянии
     abstract fun renderData(appState: T)
+
 
 }
 
